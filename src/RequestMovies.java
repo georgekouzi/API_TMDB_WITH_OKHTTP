@@ -2,7 +2,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Objects;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -12,26 +12,24 @@ public class RequestMovies extends Api {
 
     private final Moshi moshi = new Moshi.Builder().build();
     private final JsonAdapter<Movies> gistJsonAdapter = moshi.adapter(Movies.class);
-    final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient();
     private Request request;
-    private String url;
+    private final String url;
+    private  Movies movieName;
 
     public RequestMovies(String url){
-        url = url;
-        runApi(url);
+        this.url = url;
     }
 
     @Override
-    public void runApi(String url) {
-        okhttp3.Request request = new okhttp3.Request.Builder()
+    public void runApi() {
+        this.request = new Request.Builder()
                 .url(url)
                 .build();
-        this.request = request;
+                PrintMoviesName();
     }
 
-    @Override
-    public void PrintJson() {
-        Movies movieName= null;
+    private void PrintMoviesName() {
         try {
             movieName =jsonList();
         } catch (IOException e) {
@@ -49,8 +47,7 @@ public class RequestMovies extends Api {
         try (Response response = client.newCall(request).execute()) {
             assert response.body() != null;
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            Movies moviesList = gistJsonAdapter.fromJson(response.body().source());
-            return moviesList;
+            return gistJsonAdapter.fromJson(Objects.requireNonNull(response.body()).source());
         }
     }
 

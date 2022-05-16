@@ -1,10 +1,3 @@
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.io.IOException;
 
 public class Main {
     public static void main(String [] args){

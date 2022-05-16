@@ -6,11 +6,4 @@ public class Movies {
         return results;
     }
 
-
-
-
-
-
-
-
 }
